@@ -2,9 +2,13 @@
 
 
 #include "UE_GAS_Study/Public/Player/GS_PlayerController.h"
+
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "GameFramework/Character.h"
+#include "GameplayTags/GSTags.h"
 
 void AGS_PlayerController::SetupInputComponent()
 {
@@ -25,7 +29,9 @@ void AGS_PlayerController::SetupInputComponent()
 	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ThisClass::StopJumping);
 	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::Move);
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ThisClass::Look);
-	EnhancedInputComponent->BindAction(PrimaryAction, ETriggerEvent::Started, this, &ThisClass::Primary);
+	EnhancedInputComponent->BindAction(PrimaryAction, ETriggerEvent::Triggered, this, &ThisClass::Primary);
+	EnhancedInputComponent->BindAction(SecondaryAction, ETriggerEvent::Started, this, &ThisClass::Secondary);
+	EnhancedInputComponent->BindAction(TertiaryAction, ETriggerEvent::Started, this, &ThisClass::Tertiary);
 }
 
 void AGS_PlayerController::Jump()
@@ -65,5 +71,23 @@ void AGS_PlayerController::Look(const FInputActionValue& Value)
 
 void AGS_PlayerController::Primary()
 {
-	if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Primary Action Pressed"));
+	ActivateAbility(GSTags::GSAbilities::Primary);
+}
+
+void AGS_PlayerController::Secondary()
+{
+	ActivateAbility(GSTags::GSAbilities::Secondary);
+}
+
+void AGS_PlayerController::Tertiary()
+{
+	ActivateAbility(GSTags::GSAbilities::Tertiary);
+}
+
+void AGS_PlayerController::ActivateAbility(const FGameplayTag& AbilityTag) const
+{
+	UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn());
+	if (!IsValid(ASC)) return;
+
+	ASC->TryActivateAbilitiesByTag(AbilityTag.GetSingleTagContainer());
 }

@@ -17,6 +17,11 @@ class UE_GAS_STUDY_API AGS_PlayerCharacter : public AGS_BaseCharacter
 public:
 	AGS_PlayerCharacter();
 
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void OnRep_PlayerState() override;
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	TObjectPtr<USpringArmComponent> CameraBoom;
