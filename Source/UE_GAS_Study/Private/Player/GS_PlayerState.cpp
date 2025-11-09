@@ -3,6 +3,7 @@
 
 #include "Player/GS_PlayerState.h"
 #include "AbilitySystem/GS_AbilitySystemComponent.h"
+#include "AbilitySystem/GS_AttributeSet.h"
 
 AGS_PlayerState::AGS_PlayerState()
 {
@@ -11,6 +12,8 @@ AGS_PlayerState::AGS_PlayerState()
 	AbilitySystemComponent = CreateDefaultSubobject<UGS_AbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
+
+	AttributeSet = CreateDefaultSubobject<UGS_AttributeSet>(TEXT("AttributeSet"));
 }
 
 UAbilitySystemComponent* AGS_PlayerState::GetAbilitySystemComponent() const

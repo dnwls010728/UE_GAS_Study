@@ -48,6 +48,14 @@ UAbilitySystemComponent* AGS_PlayerCharacter::GetAbilitySystemComponent() const
 	return GSPlayerState->GetAbilitySystemComponent();
 }
 
+UAttributeSet* AGS_PlayerCharacter::GetAttributeSet() const
+{
+	AGS_PlayerState* GSPlayerState = GetPlayerState<AGS_PlayerState>();
+	if (!IsValid(GSPlayerState)) return nullptr;
+
+	return GSPlayerState->GetAttributeSet();
+}
+
 void AGS_PlayerCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
@@ -55,7 +63,10 @@ void AGS_PlayerCharacter::PossessedBy(AController* NewController)
 	if (!IsValid(GetAbilitySystemComponent()) || !HasAuthority()) return;
 
 	GetAbilitySystemComponent()->InitAbilityActorInfo(GetPlayerState(), this);
+	OnASCInitialized.Broadcast(GetAbilitySystemComponent(), GetAttributeSet());
+	
 	GiveStartupAbilities();
+	InitializeAttributes();
 }
 
 void AGS_PlayerCharacter::OnRep_PlayerState()
@@ -65,5 +76,6 @@ void AGS_PlayerCharacter::OnRep_PlayerState()
 	if (!IsValid(GetAbilitySystemComponent())) return;
 
 	GetAbilitySystemComponent()->InitAbilityActorInfo(GetPlayerState(), this);
+	OnASCInitialized.Broadcast(GetAbilitySystemComponent(), GetAttributeSet());
 }
 

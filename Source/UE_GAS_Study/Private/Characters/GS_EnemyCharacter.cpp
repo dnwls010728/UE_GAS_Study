@@ -4,6 +4,7 @@
 #include "Characters/GS_EnemyCharacter.h"
 
 #include "AbilitySystem/GS_AbilitySystemComponent.h"
+#include "AbilitySystem/GS_AttributeSet.h"
 
 
 AGS_EnemyCharacter::AGS_EnemyCharacter()
@@ -13,11 +14,18 @@ AGS_EnemyCharacter::AGS_EnemyCharacter()
 	AbilitySystemComponent = CreateDefaultSubobject<UGS_AbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
+
+	AttributeSet = CreateDefaultSubobject<UGS_AttributeSet>(TEXT("AttributeSet"));
 }
 
 UAbilitySystemComponent* AGS_EnemyCharacter::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+}
+
+UAttributeSet* AGS_EnemyCharacter::GetAttributeSet() const
+{
+	return AttributeSet;
 }
 
 void AGS_EnemyCharacter::BeginPlay()
@@ -27,10 +35,12 @@ void AGS_EnemyCharacter::BeginPlay()
 	if (!IsValid(GetAbilitySystemComponent())) return;
 
 	GetAbilitySystemComponent()->InitAbilityActorInfo(this, this);
+	OnASCInitialized.Broadcast(GetAbilitySystemComponent(), GetAttributeSet());
 	
 	if (!HasAuthority()) return;
 
 	GiveStartupAbilities();
+	InitializeAttributes();
 	
 }
 
