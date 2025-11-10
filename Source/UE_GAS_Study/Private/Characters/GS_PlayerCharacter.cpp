@@ -67,6 +67,11 @@ void AGS_PlayerCharacter::PossessedBy(AController* NewController)
 	
 	GiveStartupAbilities();
 	InitializeAttributes();
+	
+	UGS_AttributeSet* GS_AttributeSet = Cast<UGS_AttributeSet>(GetAttributeSet());
+	if (!IsValid(GS_AttributeSet)) return;
+	
+	GetAbilitySystemComponent()->GetGameplayAttributeValueChangeDelegate(GS_AttributeSet->GetHealthAttribute()).AddUObject(this, &ThisClass::OnHealthChanged);
 }
 
 void AGS_PlayerCharacter::OnRep_PlayerState()
@@ -77,5 +82,10 @@ void AGS_PlayerCharacter::OnRep_PlayerState()
 
 	GetAbilitySystemComponent()->InitAbilityActorInfo(GetPlayerState(), this);
 	OnASCInitialized.Broadcast(GetAbilitySystemComponent(), GetAttributeSet());
+	
+	UGS_AttributeSet* GS_AttributeSet = Cast<UGS_AttributeSet>(GetAttributeSet());
+	if (!IsValid(GS_AttributeSet)) return;
+	
+	GetAbilitySystemComponent()->GetGameplayAttributeValueChangeDelegate(GS_AttributeSet->GetHealthAttribute()).AddUObject(this, &ThisClass::OnHealthChanged);
 }
 

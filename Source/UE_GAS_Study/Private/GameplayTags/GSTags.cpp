@@ -13,6 +13,7 @@ namespace GSTags
 
 	namespace Events
 	{
+		UE_DEFINE_GAMEPLAY_TAG_COMMENT(KillScored, "GSTags.Events.KillScored", "킬 점수 이벤트 태그")
 		namespace Enemy
 		{
 			UE_DEFINE_GAMEPLAY_TAG_COMMENT(HitReact, "GSTags.Events.Enemy.HitReact", "적의 적중 반응 이벤트 태그")
