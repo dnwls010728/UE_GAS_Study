@@ -7,6 +7,10 @@
 #include "GameplayAbilitySpec.h"
 #include "Net/UnrealNetwork.h"
 
+namespace GASTags
+{
+	const FName Player = FName("Player");
+}
 
 AGS_BaseCharacter::AGS_BaseCharacter()
 {

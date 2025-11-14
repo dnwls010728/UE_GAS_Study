@@ -9,6 +9,11 @@
 
 #include "GS_BaseCharacter.generated.h"
 
+namespace GASTags
+{
+	extern UE_GAS_STUDY_API const FName Player;
+}
+
 class UAttributeSet;
 class UGameplayEffect;
 class UGameplayAbility;
@@ -40,6 +45,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "GAS|Attributes")
 	void ResetAttributes();
+	
+	UFUNCTION(BlueprintImplementableEvent)
+	void RotateToTarget(AActor* RotateTarget);
 
 protected:
 	void GiveStartupAbilities();

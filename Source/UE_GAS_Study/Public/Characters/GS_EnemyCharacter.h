@@ -21,8 +21,22 @@ public:
 
 	virtual UAttributeSet* GetAttributeSet() const override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="GAS|AI")
+	float AcceptanceRadius{500.f};
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="GAS|AI")
+	float MinAttackDelay{.1f};
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="GAS|AI")
+	float MaxAttackDelay{.5f};
+	
+	UFUNCTION(BlueprintImplementableEvent)
+	float GetTimelineLength();
+
 protected:
 	virtual void BeginPlay() override;
+	
+	virtual void HandleDeath() override;
 
 private:
 	UPROPERTY(VisibleAnywhere)
