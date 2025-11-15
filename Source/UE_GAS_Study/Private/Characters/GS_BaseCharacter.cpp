@@ -40,6 +40,7 @@ void AGS_BaseCharacter::HandleRespawn()
 void AGS_BaseCharacter::ResetAttributes()
 {
 	checkf(IsValid(ResetAttributesEffect), TEXT("ResetAttributesEffect가 설정되지 않았습니다."));
+	if (!IsValid(GetAbilitySystemComponent())) return;
 
 	FGameplayEffectContextHandle ContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
 	FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(ResetAttributesEffect, 1.f, ContextHandle);
