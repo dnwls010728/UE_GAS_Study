@@ -23,9 +23,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "GAS|Attributes")
 	FGameplayAttribute MaxAttribute;
 
-	void OnAttribyteChange(const TTuple<FGameplayAttribute, FGameplayAttribute>& Pair, UGS_AttributeSet* AttributeSet);
+	void OnAttribyteChange(const TTuple<FGameplayAttribute, FGameplayAttribute>& Pair, UGS_AttributeSet* AttributeSet, float OldValue);
 	bool MatchesAttribytes(const TTuple<FGameplayAttribute, FGameplayAttribute>& Pair) const;
 
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "On Attribute Change"))
-	void BP_OnAttributeChange(float NewValue, float NewMaxValue);
+	void BP_OnAttributeChange(float NewValue, float NewMaxValue, float OldValue);
+	
+	UPROPERTY(BlueprintReadOnly, Category = "GAS|Attributes")
+	TWeakObjectPtr<AActor> AvatorActor;
 };

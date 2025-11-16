@@ -55,12 +55,13 @@ void UGS_WidgetComponent::BindWidgetToAttributeChanges(UWidget* WidgetObject, co
 	UGS_AttributeWidget* AttributeWidget = Cast<UGS_AttributeWidget>(WidgetObject);
 	if (!IsValid(AttributeWidget)) return;
 	if (!AttributeWidget->MatchesAttribytes(Pair)) return;
+	AttributeWidget->AvatorActor = GASCharacter;
 
-	AttributeWidget->OnAttribyteChange(Pair, AttributeSet.Get());
+	AttributeWidget->OnAttribyteChange(Pair, AttributeSet.Get(), 0.f);
 
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Pair.Key).AddLambda([this, AttributeWidget, &Pair](const FOnAttributeChangeData& AttributeChangeData)
 	{
-		AttributeWidget->OnAttribyteChange(Pair, AttributeSet.Get());
+		AttributeWidget->OnAttribyteChange(Pair, AttributeSet.Get(), AttributeChangeData.OldValue);
 	});
 }
 

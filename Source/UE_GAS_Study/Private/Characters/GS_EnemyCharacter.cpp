@@ -3,8 +3,11 @@
 
 #include "Characters/GS_EnemyCharacter.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystem/GS_AbilitySystemComponent.h"
 #include "AbilitySystem/GS_AttributeSet.h"
+#include "GameplayTags/GSTags.h"
+#include "Net/UnrealNetwork.h"
 #include "Runtime/AIModule/Classes/AIController.h"
 
 
@@ -19,6 +22,13 @@ AGS_EnemyCharacter::AGS_EnemyCharacter()
 	AttributeSet = CreateDefaultSubobject<UGS_AttributeSet>(TEXT("AttributeSet"));
 }
 
+void AGS_EnemyCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	DOREPLIFETIME(ThisClass, bIsBeingLaunched);
+}
+
 UAbilitySystemComponent* AGS_EnemyCharacter::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
@@ -27,6 +37,21 @@ UAbilitySystemComponent* AGS_EnemyCharacter::GetAbilitySystemComponent() const
 UAttributeSet* AGS_EnemyCharacter::GetAttributeSet() const
 {
 	return AttributeSet;
+}
+
+void AGS_EnemyCharacter::StopMovementUntilLanded()
+{
+	bIsBeingLaunched = true;
+	
+	AAIController* AIController = GetController<AAIController>();
+	if (!IsValid(AIController)) return;
+	
+	AIController->StopMovement();
+	
+	if (!LandedDelegate.IsAlreadyBound(this, &ThisClass::EnableMovementOnLanded))
+	{
+		LandedDelegate.AddDynamic(this, &ThisClass::EnableMovementOnLanded);
+	}
 }
 
 void AGS_EnemyCharacter::BeginPlay()
@@ -58,5 +83,12 @@ void AGS_EnemyCharacter::HandleDeath()
 	if (!IsValid(AIController)) return;
 	
 	AIController->StopMovement();
+}
+
+void AGS_EnemyCharacter::EnableMovementOnLanded(const FHitResult& Hit)
+{
+	bIsBeingLaunched = false;
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, GSTags::Events::Enemy::EndAttack, FGameplayEventData());
+	LandedDelegate.RemoveAll(this);
 }
 

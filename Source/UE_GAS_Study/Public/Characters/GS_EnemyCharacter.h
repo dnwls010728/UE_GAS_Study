@@ -16,6 +16,8 @@ class UE_GAS_STUDY_API AGS_EnemyCharacter : public AGS_BaseCharacter
 
 public:
 	AGS_EnemyCharacter();
+	
+	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
@@ -32,6 +34,11 @@ public:
 	
 	UFUNCTION(BlueprintImplementableEvent)
 	float GetTimelineLength();
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
+	bool bIsBeingLaunched{false};
+	
+	void StopMovementUntilLanded();
 
 protected:
 	virtual void BeginPlay() override;
@@ -39,6 +46,9 @@ protected:
 	virtual void HandleDeath() override;
 
 private:
+	UFUNCTION()
+	void EnableMovementOnLanded(const FHitResult& Hit);
+	
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 	

@@ -2,6 +2,8 @@
 
 namespace GSTags
 {
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(None, "GSTags.None", "None 태그")
+	
 	namespace SetByCaller
 	{
 		UE_DEFINE_GAMEPLAY_TAG_COMMENT(Projectile, "GSTags.SetByCaller.Projectile", "발사체에 대한 발신자 크기별 태그")

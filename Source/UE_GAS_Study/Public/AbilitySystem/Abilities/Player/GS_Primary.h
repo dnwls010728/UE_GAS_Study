@@ -16,20 +16,16 @@ class UE_GAS_STUDY_API UGS_Primary : public UGS_GameplayAbility
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "GAS|Abilities")
-	TArray<AActor*> HitBoxOverlapTest();
-	
-	UFUNCTION(BlueprintCallable, Category = "GAS|Abilities")
 	void SendHitReactEventToActors(const TArray<AActor*>& ActorsHit);
-
-private:
-	void DrawHitBoxOverlapDebugs(const TArray<FOverlapResult>& OverlapResults, const FVector& HitBoxLocation) const;
 	
-	UPROPERTY(EditDefaultsOnly, Category = "GAS|Abilities")
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "GAS|Abilities")
 	float HitBoxRadius = 100.f;
 
-	UPROPERTY(EditDefaultsOnly, Category = "GAS|Abilities")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "GAS|Abilities")
 	float HitBoxForwardOffset = 200.f;
 
-	UPROPERTY(EditDefaultsOnly, Category = "GAS|Abilities")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "GAS|Abilities")
 	float HitBoxElevationOffset = 20.f;
+	
 };
